@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D.R SOS — AI Road Safety Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">
+    🛡️ D.R <span class="sos-badge">SOS</span>
+  </div>
+  <div class="nav-links">
+    <button class="active" onclick="showPage('home',this)">Home</button>
+    <button onclick="showPage('sos',this)">SOS</button>
+    <button onclick="showPage('highway',this)">Highway</button>
+    <button onclick="showPage('vehicle',this)">Vehicle</button>
+    <button onclick="showPage('pothole',this)">Road Map</button>
+    <button onclick="showPage('insurance',this)">Insurance</button>
+    <button onclick="showPage('detection',this)">AI Sensor</button>
+  </div>
+  <button class="nav-emergency" onclick="showPage('sos',document.querySelector('.nav-links button:nth-child(2)'));triggerSOSCountdown()">🚨 EMERGENCY</button>
+</nav>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- COUNTDOWN OVERLAY -->
+<div class="countdown-overlay" id="countdownOverlay">
+  <div class="countdown-ring">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <circle class="bg-ring" cx="100" cy="100" r="90"/>
+      <circle class="progress-ring" id="progressRing" cx="100" cy="100" r="90"/>
+    </svg>
+    <div class="countdown-num" id="countdownNum">10</div>
+  </div>
+  <div class="countdown-text">⚠️ Accident Detected!</div>
+  <div class="countdown-sub">SOS will be triggered automatically. Press CANCEL if you're safe.</div>
+  <button class="countdown-cancel" onclick="cancelCountdown()">✅ I AM SAFE — CANCEL SOS</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <h3 id="modalTitle">Confirm Action</h3>
+    <p id="modalText">Are you sure?</p>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" id="modalConfirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-badge">🔴 LIVE · AI-POWERED ROAD SAFETY</div>
+    <h1>D.R <span>SOS</span><br>PLATFORM</h1>
+    <p class="hero-sub">India's unified AI road safety ecosystem — accident detection, emergency dispatch, highway assistance & more in one app.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="showPage('sos',document.querySelector('.nav-links button:nth-child(2)'))">🚨 Emergency SOS</button>
+      <button class="btn-outline" onclick="showPage('detection',document.querySelectorAll('.nav-links button')[6])">⚙️ AI Sensor Demo</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num" id="counterAccidents">0</div><div class="stat-label">ACCIDENTS DETECTED</div></div>
+      <div class="stat-item"><div class="stat-num" id="counterAlerts">0</div><div class="stat-label">ALERTS SENT</div></div>
+      <div class="stat-item"><div class="stat-num" id="counterPotholes">0</div><div class="stat-label">POTHOLES MAPPED</div></div>
+      <div class="stat-item"><div class="stat-num" id="counterVerified">0</div><div class="stat-label">VEHICLES VERIFIED</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">CORE FEATURES</div>
+    <div class="section-title">Everything You Need<br>On One Platform</div>
+    <div class="features-grid">
+      <div class="feature-card" onclick="showPage('sos',document.querySelectorAll('.nav-links button')[1])">
+        <div class="feature-icon">🚨</div>
+        <div class="feature-title">AI Accident Detection</div>
+        <div class="feature-desc">Continuous monitoring of accelerometer, gyroscope & GPS to detect crash signatures and auto-trigger SOS within seconds.</div>
+        <div class="feature-tag">REAL-TIME</div>
+      </div>
+      <div class="feature-card" onclick="showPage('sos',document.querySelectorAll('.nav-links button')[1])">
+        <div class="feature-icon">🎙️</div>
+        <div class="feature-title">Voice-Based SOS</div>
+        <div class="feature-desc">Say "Help", "Accident", or "Kaapathu" in Tamil, Hindi, or English. Emergency mode activates without touching the screen.</div>
+        <div class="feature-tag">MULTILINGUAL</div>
+      </div>
+      <div class="feature-card" onclick="showPage('highway',document.querySelectorAll('.nav-links button')[2])">
+        <div class="feature-icon">🛣️</div>
+        <div class="feature-title">Highway Assistance</div>
+        <div class="feature-desc">Instantly find nearby mechanics, towing services, petrol stations, and ambulances based on your real-time GPS location.</div>
+        <div class="feature-tag">GPS-POWERED</div>
+      </div>
+      <div class="feature-card" onclick="showPage('vehicle',document.querySelectorAll('.nav-links button')[3])">
+        <div class="feature-icon">🔍</div>
+        <div class="feature-title">Vehicle Verification</div>
+        <div class="feature-desc">Scan number plates to check challans, insurance status, theft records, ownership history and past accidents instantly.</div>
+        <div class="feature-tag">PLATE SCAN</div>
+      </div>
+      <div class="feature-card" onclick="showPage('pothole',document.querySelectorAll('.nav-links button')[4])">
+        <div class="feature-icon">🗺️</div>
+        <div class="feature-title">Pothole Detection</div>
+        <div class="feature-desc">Crowd-sourced vibration data mapped by AI to generate live road hazard maps and proactive driver warnings.</div>
+        <div class="feature-tag">CROWD-SOURCED</div>
+      </div>
+      <div class="feature-card" onclick="showPage('insurance',document.querySelectorAll('.nav-links button')[5])">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Insurance Claims</div>
+        <div class="feature-desc">Upload evidence, share GPS data, and initiate insurance claims directly from the app — right at the accident scene.</div>
+        <div class="feature-tag">ONE-TAP CLAIM</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SOS PAGE ===== -->
+<div class="page" id="page-sos">
+  <div class="sos-page">
+    <div class="sos-header">
+      <h2>🚨 Emergency SOS</h2>
+      <p>Press the button to immediately alert emergency contacts & services.</p>
+    </div>
+
+    <div class="alert-sent" id="alertSent">
+      <h3>✅ SOS Alert Dispatched!</h3>
+      <p>Emergency contacts notified. Nearby hospitals alerted. Live location sharing enabled.<br>Help is on the way.</p>
+    </div>
+
+    <div class="sos-main-btn-wrap">
+      <button class="sos-main-btn" onclick="triggerSOSCountdown()">
+        <div class="btn-icon">🆘</div>
+        SOS
+      </button>
+    </div>
+
+    <!-- Voice SOS -->
+    <div class="voice-panel">
+      <div class="voice-header">
+        <span>🎙️</span>
+        <h4>VOICE SOS — TAP MIC OR CLICK A COMMAND</h4>
+      </div>
+      <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎤</button>
+      <div class="voice-commands">
+        <div class="voice-cmd" onclick="voiceTrigger('Help')">🇬🇧 Help</div>
+        <div class="voice-cmd" onclick="voiceTrigger('Accident')">⚠️ Accident</div>
+        <div class="voice-cmd" onclick="voiceTrigger('Kaapathu')">🇮🇳 Kaapathu</div>
+        <div class="voice-cmd" onclick="voiceTrigger('Bachao')">🇮🇳 Bachao</div>
+        <div class="voice-cmd" onclick="voiceTrigger('Emergency')">🚑 Emergency</div>
+      </div>
+      <div class="voice-status" id="voiceStatus">Click microphone to start listening...</div>
+    </div>
+
+    <div class="sos-panels">
+      <div class="sos-panel">
+        <h4>📱 EMERGENCY CONTACTS</h4>
+        <div class="contact-row">
+          <div class="contact-info">
+            <div class="contact-avatar" style="background:rgba(255,45,45,0.2); color:var(--red)">R</div>
+            <div>
+              <div class="contact-name">Ravi Kumar</div>
+              <div class="contact-rel">Father</div>
+            </div>
+          </div>
+          <div class="contact-status status-alert" id="cs1">STANDBY</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-info">
+            <div class="contact-avatar" style="background:rgba(41,121,255,0.2); color:var(--blue)">P</div>
+            <div>
+              <div class="contact-name">Priya Sharma</div>
+              <div class="contact-rel">Sister</div>
+            </div>
+          </div>
+          <div class="contact-status status-alert" id="cs2">STANDBY</div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-info">
+            <div class="contact-avatar" style="background:rgba(0,230,118,0.2); color:var(--green)">A</div>
+            <div>
+              <div class="contact-name">Arun Patel</div>
+              <div class="contact-rel">Friend</div>
+            </div>
+          </div>
+          <div class="contact-status status-alert" id="cs3">STANDBY</div>
+        </div>
+        <div style="margin-top:14px">
+          <button class="svc-btn" onclick="addContact()" style="width:100%;padding:10px">+ Add Contact</button>
+        </div>
+      </div>
+
+      <div class="sos-panel">
+        <h4>🏥 NEAREST EMERGENCY SERVICES</h4>
+        <div class="contact-row">
+          <div class="contact-info">
+            <div style="font-size:22px">🏥</div>
+            <div>
+              <div class="contact-name">Apollo Hospital</div>
+              <div class="contact-rel">1.2 km · Trauma Care</div>
+            </div>
+          </div>
+          <button class="svc-btn call-btn" onclick="callService('Apollo Hospital')">📞 CALL</button>
+        </div>
+        <div class="contact-row">
+          <div class="contact-info">
+            <div style="font-size:22px">🚑</div>
+            <div>
+              <div class="contact-name">108 Ambulance</div>
+              <div class="contact-rel">Govt Emergency · ETA 4 min</div>
+            </div>
+          </div>
+          <button class="svc-btn call-btn" onclick="callService('108 Ambulance')">📞 CALL</button>
+        </div>
+        <div class="contact-row">
+          <div class="contact-info">
+            <div style="font-size:22px">👮</div>
+            <div>
+              <div class="contact-name">Police Control Room</div>
+              <div class="contact-rel">100 · Nearest Unit 2.4 km</div>
+            </div>
+          </div>
+          <button class="svc-btn call-btn" onclick="callService('Police')">📞 CALL</button>
+        </div>
+        <div class="contact-row">
+          <div class="contact-info">
+            <div style="font-size:22px">🔥</div>
+            <div>
+              <div class="contact-name">Fire & Rescue</div>
+              <div class="contact-rel">101 · Station 3.1 km</div>
+            </div>
+          </div>
+          <button class="svc-btn call-btn" onclick="callService('Fire & Rescue')">📞 CALL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HIGHWAY ASSISTANCE PAGE ===== -->
+<div class="page" id="page-highway">
+  <div class="highway-page">
+    <div class="page-header">
+      <h2>🛣️ Highway Assistance</h2>
+      <p>Find nearby road services based on your live GPS location.</p>
+    </div>
+
+    <div class="location-bar">
+      <div class="location-dot"></div>
+      <div class="location-text">
+        NH-44, Near Krishnagiri, Tamil Nadu
+        <span>📍 12.524°N, 78.213°E · Last updated 1 min ago</span>
+      </div>
+      <button class="refresh-btn" onclick="refreshLocation()">🔄 Refresh</button>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterServices('all',this)">All Services</button>
+      <button class="filter-btn" onclick="filterServices('mechanic',this)">🔧 Mechanic</button>
+      <button class="filter-btn" onclick="filterServices('towing',this)">🚛 Towing</button>
+      <button class="filter-btn" onclick="filterServices('fuel',this)">⛽ Fuel</button>
+      <button class="filter-btn" onclick="filterServices('ambulance',this)">🚑 Ambulance</button>
+      <button class="filter-btn" onclick="filterServices('food',this)">🍽️ Rest Area</button>
+    </div>
+
+    <div class="services-grid" id="servicesGrid">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ===== VEHICLE VERIFICATION PAGE ===== -->
+<div class="page" id="page-vehicle">
+  <div class="vehicle-page">
+    <div class="page-header">
+      <h2>🔍 Vehicle Verification</h2>
+      <p>Check any vehicle's complete history before buying or reporting.</p>
+    </div>
+
+    <div class="scan-box" onclick="simulateScan()">
+      <div class="scan-line"></div>
+      <div class="scan-icon">📷</div>
+      <div class="scan-title">Scan Number Plate</div>
+      <div class="scan-sub">Tap to activate camera & scan the plate<br>AI will auto-detect and extract the number</div>
+    </div>
+
+    <div class="or-divider">OR ENTER MANUALLY</div>
+
+    <div class="input-group">
+      <input class="plate-input" id="plateInput" placeholder="TN 01 AB 1234" maxlength="14" oninput="formatPlate(this)" />
+    </div>
+    <button class="verify-btn" onclick="verifyVehicle()">
+      <span id="verifyBtnText">🔍 VERIFY VEHICLE</span>
+    </button>
+
+    <br><br>
+
+    <div class="vehicle-result" id="vehicleResult">
+      <div class="vr-header">
+        <div>
+          <div class="vr-plate" id="vr-plate">TN 01 AB 1234</div>
+          <div style="color:var(--muted);font-size:13px;margin-top:4px" id="vr-type">2021 Honda Activa 6G · Petrol</div>
+        </div>
+        <div class="vr-score">
+          <div class="vr-score-num score-safe" id="vr-score">87</div>
+          <div class="vr-score-label">SAFETY SCORE</div>
+        </div>
+      </div>
+      <div class="vr-body">
+        <div class="vr-grid" id="vrGrid"></div>
+        <button class="verify-btn" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text)" onclick="downloadReport()">📄 Download Full Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POTHOLE PAGE ===== -->
+<div class="page" id="page-pothole">
+  <div class="pothole-page">
+    <div class="page-header">
+      <h2>🗺️ Road Hazard Map</h2>
+      <p>AI-powered crowd-sourced pothole and accident hotspot mapping.</p>
+    </div>
+
+    <div class="map-mock" id="roadMap">
+      <div class="map-grid-bg"></div>
+      <!-- roads -->
+      <div class="map-road-h" style="top:45%"></div>
+      <div class="map-road-h" style="top:72%"></div>
+      <div class="map-road-v" style="left:30%"></div>
+      <div class="map-road-v" style="left:65%"></div>
+      <!-- heat zones -->
+      <div class="map-heatzone" style="width:120px;height:120px;top:30%;left:25%"></div>
+      <div class="map-heatzone" style="width:80px;height:80px;top:60%;left:58%"></div>
+      <!-- pins -->
+      <div class="map-pin" style="left:27%;top:46%"><div class="map-pin-dot pin-pothole" title="Pothole">🕳️</div></div>
+      <div class="map-pin" style="left:32%;top:58%"><div class="map-pin-dot pin-pothole" title="Pothole">🕳️</div></div>
+      <div class="map-pin" style="left:62%;top:44%"><div class="map-pin-dot pin-accident" title="Accident Zone">⚠️</div></div>
+      <div class="map-pin" style="left:67%;top:64%"><div class="map-pin-dot pin-pothole" title="Pothole">🕳️</div></div>
+      <div class="map-pin" style="left:48%;top:35%"><div class="map-pin-dot pin-accident" title="Accident Zone">⚠️</div></div>
+      <div class="map-pin" style="left:50%;top:48%" id="userPin">
+        <div class="map-pin-dot pin-user" style="position:relative">📍<div class="pin-pulse"></div></div>
+      </div>
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Pothole</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Accident Zone</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>You</div>
+      </div>
+    </div>
+
+    <div class="report-grid">
+      <div class="report-card"><div class="report-icon">🕳️</div><div><div class="report-num" style="color:var(--red)" id="potholeCount">247</div><div class="report-label">Potholes Mapped</div></div></div>
+      <div class="report-card"><div class="report-icon">⚠️</div><div><div class="report-num" style="color:var(--orange)" id="accidentZones">38</div><div class="report-label">Accident Zones</div></div></div>
+      <div class="report-card"><div class="report-icon">👥</div><div><div class="report-num" style="color:var(--blue)" id="activeUsers">1204</div><div class="report-label">Active Contributors</div></div></div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="report-hazard-btn" onclick="reportPothole()">🕳️ Report Pothole</button>
+      <button class="report-hazard-btn" style="background:var(--red)" onclick="reportAccident()">⚠️ Report Accident Zone</button>
+    </div>
+
+    <div class="reports-table">
+      <div class="rt-header"><h4>RECENT CROWD REPORTS</h4></div>
+      <div id="reportsTableBody"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INSURANCE PAGE ===== -->
+<div class="page" id="page-insurance">
+  <div class="insurance-page">
+    <div class="page-header">
+      <h2>📋 Insurance Claim</h2>
+      <p>File a claim instantly from the accident scene with verified GPS data & photos.</p>
+    </div>
+
+    <div class="claim-steps" id="claimSteps">
+      <div class="claim-step active" id="cstep1"><div class="step-circle">1</div><div class="step-label">INCIDENT DETAILS</div></div>
+      <div class="claim-step" id="cstep2"><div class="step-circle">2</div><div class="step-label">EVIDENCE UPLOAD</div></div>
+      <div class="claim-step" id="cstep3"><div class="step-circle">3</div><div class="step-label">REVIEW</div></div>
+      <div class="claim-step" id="cstep4"><div class="step-circle">4</div><div class="step-label">SUBMITTED</div></div>
+    </div>
+
+    <div class="claim-form" id="claimFormEl">
+      <div class="form-title" id="formTitle">📝 Incident Details</div>
+      <div id="formStep1">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">VEHICLE NUMBER</label>
+            <input class="form-input" id="claimPlate" placeholder="TN 01 AB 1234" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">DATE & TIME OF INCIDENT</label>
+            <input class="form-input" type="datetime-local" id="claimDate" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">INCIDENT TYPE</label>
+            <select class="form-select" id="claimType">
+              <option>Collision with another vehicle</option>
+              <option>Single vehicle accident</option>
+              <option>Hit and run</option>
+              <option>Animal on road</option>
+              <option>Pothole damage</option>
+              <option>Flood damage</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">SEVERITY</label>
+            <select class="form-select" id="claimSeverity">
+              <option>Minor — Cosmetic damage only</option>
+              <option>Moderate — Vehicle drivable</option>
+              <option>Severe — Vehicle undrivable</option>
+              <option>Total loss</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">INCIDENT DESCRIPTION</label>
+          <textarea class="form-textarea" id="claimDesc" placeholder="Describe what happened in detail..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">GPS LOCATION (AUTO-CAPTURED)</label>
+          <input class="form-input" value="📍 NH-44 Near Krishnagiri, TN — 12.524°N, 78.213°E" readonly style="color:var(--green);font-size:13px"/>
+        </div>
+      </div>
+
+      <div id="formStep2" style="display:none">
+        <div class="photo-upload" onclick="uploadPhoto('damage')">
+          <div class="photo-upload-icon">📸</div>
+          <strong>Upload Vehicle Damage Photos</strong>
+          <p>Click to select up to 6 photos · JPG, PNG supported</p>
+        </div>
+        <div class="photo-upload" onclick="uploadPhoto('scene')">
+          <div class="photo-upload-icon">🚧</div>
+          <strong>Upload Accident Scene Photos</strong>
+          <p>Wide shots of the accident location</p>
+        </div>
+        <div class="photo-upload" onclick="uploadPhoto('doc')">
+          <div class="photo-upload-icon">📄</div>
+          <strong>Upload Insurance / RC Documents</strong>
+          <p>Attach valid insurance certificate & RC</p>
+        </div>
+        <div id="photoList" style="margin-top:14px"></div>
+      </div>
+
+      <div id="formStep3" style="display:none">
+        <div style="background:var(--bg3);border-radius:12px;padding:20px;margin-bottom:18px">
+          <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;margin-bottom:14px;color:var(--muted)">CLAIM SUMMARY</div>
+          <div id="claimSummary"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">POLICY NUMBER</label>
+          <input class="form-input" id="policyNum" placeholder="INS-XXXXXXXX" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">INSURER NAME</label>
+          <select class="form-select" id="insurer">
+            <option>HDFC ERGO General Insurance</option>
+            <option>Bajaj Allianz General Insurance</option>
+            <option>ICICI Lombard General Insurance</option>
+            <option>New India Assurance</option>
+            <option>Star Health Insurance</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="formNav" style="display:flex;gap:12px;margin-top:8px">
+        <button class="modal-cancel" id="prevBtn" style="display:none" onclick="claimPrev()">← Back</button>
+        <button class="submit-claim" id="nextBtn" onclick="claimNext()">Next Step →</button>
+      </div>
+    </div>
+
+    <div class="claim-status" id="claimStatusEl">
+      <div class="cs-header">
+        <h3>✅ Claim Successfully Submitted!</h3>
+        <p style="color:var(--muted);font-size:13px">Your insurer has been notified. Expected processing: 3–5 business days.</p>
+      </div>
+      <div class="cs-body">
+        <div class="cs-id" id="claimId">CLAIM #DR-2026-00000</div>
+        <div class="cs-timeline" id="claimTimeline"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AI DETECTION PAGE ===== -->
+<div class="page" id="page-detection">
+  <div class="detection-page">
+    <div class="page-header">
+      <h2>⚙️ AI Sensor — Live Demo</h2>
+      <p>Simulate real-time sensor data and watch the AI crash detection model react.</p>
+    </div>
+
+    <div class="sensor-grid" id="sensorGrid">
+      <!-- JS populated -->
+    </div>
+
+    <div class="ai-status" id="aiStatus">
+      <div class="ai-icon">🤖</div>
+      <div class="ai-info" style="flex:1">
+        <h4>AI Crash Detection Model</h4>
+        <div class="ai-state" id="aiStateText"><strong>MONITORING</strong> — All sensors nominal. No anomaly detected.</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+          <span style="font-size:12px;color:var(--muted)">Crash Probability:</span>
+          <div class="confidence-bar" style="flex:1"><div class="conf-fill" id="confFill" style="width:5%"></div></div>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:13px" id="confNum">5%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sim-controls">
+      <button class="sim-btn" onclick="startNormalRide()">🏍️ Normal Ride</button>
+      <button class="sim-btn" onclick="startRoughRoad()">🪨 Rough Road</button>
+      <button class="sim-btn crash-btn" onclick="simulateCrash()">💥 Simulate Crash</button>
+      <button class="sim-btn" onclick="simulatePothole()">🕳️ Pothole Hit</button>
+      <button class="sim-btn" onclick="stopSim()">⏹ Stop</button>
+    </div>
+
+    <div class="log-box" id="logBox">
+      <div class="log-line"><span class="log-time">[00:00:00] </span><span class="log-ok">▶ D.R SOS Sensor System Initialized</span></div>
+      <div class="log-line"><span class="log-time">[00:00:00] </span><span class="log-normal">  Accelerometer: Ready</span></div>
+      <div class="log-line"><span class="log-time">[00:00:00] </span><span class="log-normal">  Gyroscope: Ready</span></div>
+      <div class="log-line"><span class="log-time">[00:00:00] </span><span class="log-normal">  GPS Module: Ready</span></div>
+      <div class="log-line"><span class="log-time">[00:00:00] </span><span class="log-normal">  AI Model v2.4: Loaded</span></div>
+      <div class="log-line"><span class="log-time">[00:00:00] </span><span class="log-ok">  All systems operational. Monitoring started.</span></div>
+    </div>
+  </div>
+</div>
+
+<script src="./script.js"></script>
+
+</body>
+</html>
